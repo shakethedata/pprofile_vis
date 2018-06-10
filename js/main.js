@@ -2,7 +2,7 @@
 *    main.js for Patient profile
 */
 
-var margin = { left: 200, right: 10, top: 50, bottom: 100 };
+var margin = { left: 200, right: 160, top: 50, bottom: 100 };
 var t = d3.transition().duration(750);
 var gradesColour = d3.scaleOrdinal(d3.schemePastel1);
 var tip = d3.tip()
@@ -14,7 +14,7 @@ var tip = d3.tip()
     });
 
 
-var width = 600 - margin.left - margin.right,
+var width = 750 - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;
 
 var g = d3.select("#chart-area")
@@ -45,6 +45,16 @@ var x = d3.scaleLinear()
     .range([0, width]);
 
 
+var xAxisGroup = g.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height +")");
+
+var yAxisGroup = g.append("g")
+    .attr("class", "y axis");
+
+
+
+// Main plotting function updated as requried
 function update(data) {
     // Define arrowhead markers
     var markerData = [
@@ -71,17 +81,9 @@ function update(data) {
         .append('svg:path')
         .attr('d', function (d) { return d.path })
         .attr('fill', function (d, i) { return gradesColour(i) });
-
-
-
-
-    //Y Scale
-    var y = d3.scaleBand()
-        .domain(data.map(d => d.AEDECOD))
-        .range([0, height])
-        .padding(0.2);
-
     var aeType = $("#aeType-select").val();
+    
+    // Filter data if required
     var data = data.filter(function (d) {
         if (aeType == "all") { return true; }
         else {
@@ -91,19 +93,34 @@ function update(data) {
     })
     console.log(data);
 
+    //Y Scale - after data is filtered
+    var y = d3.scaleBand()
+       .domain(data.map(d => d.AEDECOD))
+       .range([0, height])
+       .padding(0.2);
+
     var bars = g.selectAll("rect")
         .data(data)
         .attr('marker-end', function (d, i) { return 'url(#marker_' + 'arrow' + ')' })
 
     //EXIT
     //Remove bar elements not kept in new data selection
-    bars.exit().remove();
+    bars.exit()
+        .transition(t)
+        .attr("y", y(0))
+        .attr("height", 0)
+    .   remove();
 
     //UPDATE
     // Update old bars
     bars.attr("class", "update")
-        .attr("fill", "red");
-
+        .attr("fill", "red")
+        .transition(t)
+        .attr('y', d => y(d.AEDECOD) + 12)
+        .attr('width', d => x(d.AENDY - d.ASTDY + 1))
+        .attr("fill-opacity", 1)
+    
+    // Add new bars
     bars.enter()
         .append("rect")
         .attr('x', d => x(d.ASTDY))
@@ -120,9 +137,18 @@ function update(data) {
         .attr("fill-opacity", 1)
 
     // Y Axis
-    var yAxis = d3.axisLeft().scale(y);
+
+    var yAxis = d3.axisLeft()
+        .scale(y);
+
+    var yAxisCall = d3.axisLeft(y)
+    yAxisGroup.transition(t).call(yAxisCall);
+        
+    
+    /*
     g.append("g")
         .call(yAxis);
+    */
 
     // X Axis
     var xAxis = d3.axisBottom().scale(x);
@@ -136,7 +162,7 @@ function update(data) {
     // Legend group to be displayed at bottom right
     var grades = ["Grade 1", "Grade 2", "Grade 3", "Grade 4"]
     var legend = g.append("g")
-        .attr("transform", "translate(360,160)");
+        .attr("transform", "translate(450,100)");
     grades.forEach(function (grade, i) {
         var legendRow = legend.append("g")
             .attr("transform", "translate(0, " + (i * 20) + ")");
@@ -145,7 +171,7 @@ function update(data) {
             .attr("height", 10)
             .attr("fill", gradesColour(grade));
         legendRow.append("text")
-            .attr("x", -10)
+            .attr("x", 80)
             .attr("y", 10)
             .attr("text-anchor", "end")
             .text(grade)
