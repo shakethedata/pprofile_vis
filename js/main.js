@@ -106,6 +106,7 @@ function update(data) {
     //EXIT
     //Remove bar elements not kept in new data selection
     bars.exit()
+        .attr("fill", "red")
         .transition(t)
         .attr("y", y(0))
         .attr("height", 0)
@@ -114,7 +115,6 @@ function update(data) {
     //UPDATE
     // Update old bars
     bars.attr("class", "update")
-        .attr("fill", "red")
         .transition(t)
         .attr('y', d => y(d.AEDECOD) + 12)
         .attr('width', d => x(d.AENDY - d.ASTDY + 1))
