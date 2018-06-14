@@ -19,16 +19,46 @@
 
 <body>
 
-    <!-- Bootstrap grid setup -->
-    <div class="container">   
-        <div class="row">
-            <div class="col-md-2">
-                    <select id="aeType-select" class="form-control">
-                        <option selected value="all">All</option>
-                        <option value="g2">Grade 2+</option>
-                    </select>
+              <!--This is a comment. Comments are not displayed in the browser
+            <div class="col-md-1">
             </div>
-        </div>
+        -->
+    <!-- Bootstrap grid setup -->
+    <div class="container"> 
+      
+            <div class="row">
+                    <div class="col-md-4">
+                            <h4>USUBJID: XXX-YYY</h4>
+                            <h5>Treatment Start Date: 20MAR2018</h5>
+                            <h5>Treatment End Date: 16JUN2018</h5>
+                            <br>
+                            <br>
+                    </div>
+                </div>
+            
+                   
+            
+            
+            <div id="selections" class="row">
+                    <div class="col-md-2">
+                            <select id="aeType-select" class="form-control">
+                                <option selected value="all">All</option>
+                                <option value="g2">Grade 2+</option>
+                            </select>
+                    </div>
+                    <div class="col-md-1">
+                        </div>
+                    <div class="col-md-4">     
+                            <div id="slider-div">
+                                <label>Date/Study Day <span id="dateLabel1">20MAR2018/-1</span> - 
+                                    <span id="dateLabel2">16JUN2018/100</span></label>
+                                <div id="day-slider"></div>
+                                
+                            </div>
+                        
+            </div>         
+    </div>
+
         <div class="row">
             <div id="chart-area"></div>
         </div>

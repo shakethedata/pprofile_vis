@@ -3,6 +3,32 @@
 */
 
 
+
+// Add jQuery UI slider - study day
+$("#day-slider").slider({
+    range: true,
+    max: 100,
+    min: -5,
+    step: 1, // One day
+    values: [-5, 100],
+    slide: function(event, ui){
+        $("#dateLabel1").text(ui.values[0]+ '/x');
+        $("#dateLabel2").text(ui.values[1]+ '/y');
+        update(data);
+    }
+});
+
+function getDay (refdate, date1) {
+    var date1 = new Date("03/18/2018");
+    var date2 = new Date("03/15/2010");
+    var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+    var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+    return (diffDays)
+}
+
+// for testing
+var sliderValues = $("#day-slider").slider("values");
+
 var t = d3.transition().duration(750);
 var gradesColour = d3.scaleOrdinal(d3.schemePastel1);
 
