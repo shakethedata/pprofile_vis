@@ -80,6 +80,13 @@ var svg = d3.select("#chart-area")
 // Main plotting function updated as requried
 function update(data) {
 
+     // Filter data based on slider dates
+     var sliderValues = $("#day-slider").slider("values");
+ /*var dataTimeFiltered = data.filter(function(d){
+     return ((d.date >= sliderValues[0]) && (d.date <= sliderValues[1]))
+ });
+ */
+
     var margin = { left: 200, right: 160, top: 50, bottom: 100 };
     var aeType = $("#aeType-select").val();
    
@@ -114,6 +121,13 @@ g.call(tip);
 var x = d3.scaleLinear()
     .domain([1, d3.max(data, function (d) { return d.AENDY })])
     .range([0, width]);
+
+//* This needs to relate to slider values + update values that start before to be the min
+/*
+var x = d3.scaleLinear()
+    .domain([6, 200])
+    .range([0, width]);
+*/
 
 
 var xAxisGroup = g.append("g")
