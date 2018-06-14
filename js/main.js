@@ -2,29 +2,46 @@
 *    main.js for Patient profile
 */
 
-
-
-// Add jQuery UI slider - study day
-$("#day-slider").slider({
-    range: true,
-    max: 100,
-    min: -5,
-    step: 1, // One day
-    values: [-5, 100],
-    slide: function(event, ui){
-        $("#dateLabel1").text(ui.values[0]+ '/x');
-        $("#dateLabel2").text(ui.values[1]+ '/y');
-        update(data);
-    }
-});
-
-function getDay (refdate, date1) {
-    var date1 = new Date("03/18/2018");
-    var date2 = new Date("03/15/2010");
+function getDay (refdate, date) {
+    //var date1 = new Date("03/18/2018");
+    //var date2 = new Date("03/15/2018");
+    var date1 = refdate
+    var date2 = date
     var timeDiff = Math.abs(date2.getTime() - date1.getTime());
     var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
     return (diffDays)
 }
+var parseTime = d3.timeParse("%d/%m/%Y");
+var formatTime = d3.timeFormat("%d/%m/%Y");
+var refdate = parseTime("18/03/2018").getTime()
+var refdate = new Date("03/18/2018");
+
+// Add jQuery UI slider -  date +study day
+$("#day-slider").slider({
+    range: true,
+    min: parseTime("18/03/2018").getTime(),
+    max: parseTime("18/06/2018").getTime(),
+   
+    step: 86400000, // One day
+    values: [parseTime("18/03/2018").getTime(), parseTime("18/06/2018").getTime()],
+    slide: function(event, ui){
+        var minDate = new Date(ui.values[0])
+        var minDay = getDay(refdate, minDate)
+        var maxDate = new Date(ui.values[1])
+        var maxDay = getDay(refdate, maxDate)
+        $("#dateLabel1").text(formatTime(new Date(ui.values[0])) + '/' +minDay);
+        $("#dateLabel2").text(formatTime(new Date(ui.values[1])) + '/' +maxDay);
+        update(data);
+        console.log (new Date(ui.values[0]))
+        
+    }
+});
+
+
+
+
+
+
 
 // for testing
 var sliderValues = $("#day-slider").slider("values");
